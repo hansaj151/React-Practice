@@ -1,22 +1,25 @@
 var path = require('path');
 
+
 module.exports = {
     entry : [
         'babel-polyfill',
-        [__dirname, 'src', 'app', 'app.js'].join(path.sep)
+        [__dirname, 'src', 'app','app.js'].join(path.sep)
     ],
     resolve : {
-        moduleDirectories: ['node_modules']
+        modulesDirectories: ['node_modules']
     },
     output : {
-        path : [__dirname, './src'].join(path.sep),
+        path : [__dirname,'src'].join(path.sep),
         filename : 'bundle.js'
     },
     module : {
-        loaders : [{
-            test: /\.jsx?$/,
-            exclude: /(node_modules)/,
-            loader: 'babel'
-        }]
+        loaders : [
+            {
+                test: /\.jsx?$/,
+                exclude: /node_modules/,
+                loader: 'babel'
+            }
+        ]
     }
 };
