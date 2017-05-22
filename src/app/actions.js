@@ -2,7 +2,6 @@
  * Created by Hansaj on 18/5/17.
  */
 
-/*import { uuId, apiToken} from './config';*/
 import fetch from 'isomorphic-fetch';
 export const RECEIVE_TASKS = "RECEIVE_TASKS";
 export const ADD_TASK = "ADD_TASK";

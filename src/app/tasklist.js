@@ -1,7 +1,7 @@
 /**
  * Created by Hansaj on 18/5/17.
  */
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { addTask } from './actions';
 
