@@ -1,23 +1,33 @@
 /**
  * Created by Hansaj on 18/5/17.
  */
-import { GET_TASKS, ADD_TASK, COMPLETE_TASK} from './actions';
+import { LOGIN, LOGOUT, RECEIVE_TASKS, ADD_TASK, COMPLETE_TASK} from './actions';
 
 
 export default rootReducer;
 
 const initialState = {
-    tasks: []
+    tasks: [],
+    authentication: {}
 };
 
 function rootReducer(state= initialState, action) {
     switch (action.type) {
-        case GET_TASKS :
+        case LOGIN :
+            return Object.assign({}, state, { authentication : action.payload.authentication});
+
+        case LOGOUT :
+            return Object.assign({}, state, { tasks : action.payload.tasks, authentication : action.payload.authentication})
+
+        case RECEIVE_TASKS :
             return Object.assign({}, state, { tasks: action.payload.tasks });
+
         case ADD_TASK :
             return addTaskReducer(state, action);
+
         case COMPLETE_TASK:
             return completeTaskReducer(state, action);
+
         default :
             return state;
     }

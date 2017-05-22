@@ -1,39 +1,51 @@
 /**
  * Created by Hansaj on 18/5/17.
  */
-export const GET_TASKS = "GET_TASKS";
+
+/*import { uuId, apiToken} from './config';*/
+import fetch from 'isomorphic-fetch';
+export const RECEIVE_TASKS = "RECEIVE_TASKS";
 export const ADD_TASK = "ADD_TASK";
 export const COMPLETE_TASK = "COMPLETE_TASK";
+export const LOGIN = "LOGIN";
+export const LOGOUT = "LOGOUT";
 
-export const tasks = [
-    {
-        id : 1,
-        type : 'daily',
-        text :'check Facebook',
-        completed : false
-    },
-    {
-        id : 2,
-        type : 'habit',
-        text :'walk up the stairs'
-    },
-    {
-        id : 3,
-        type : 'todo',
-        text :'finish redux slides',
-        completed : true
-    },
-    {
-        id : 4,
-        type : 'todo',
-        text :'finish redux tutorials',
-        completed : false
+export function fetchTasks() {
+    return function (dispatch, getState) {
+        console.log("Fetch called");
+        let state = getState();
+        console.log(state);
+
+
+        if (state.authentication.uuid === undefined || state.authentication.apiToken === undefined) {
+
+            console.log("User not logged in to fetch details");
+            return function () {};
+        }
+        if (state.authentication.apiToken == '' || state.authentication.apiToken == '') {
+            console.log("User not logged in to fetch details");
+            return function () {};
+        }
+        console.log("User logged in to fetch details");
+        return fetch('https://habatica.com:443/api/v2/user/tasks', {
+            headers : {
+                'X-API-User': state.authentication.uuid,
+                'X-API-Key' : state.authentication.apiToken
+            },
+            timeout: 5000
+        })
+        .then(response => response.json())
+        .then((json) => {
+            dispatch(receiveTasks(json));
+        });
+
+        console.log("json recieved");
     }
-];
+}
 
-export function getTasks() {
+export function receiveTasks(tasks) {
     return {
-        type: GET_TASKS,
+        type: RECEIVE_TASKS,
         payload: {
             tasks
         }
@@ -54,6 +66,32 @@ export function completeTask(id) {
         type: COMPLETE_TASK,
         payload: {
             id
+        }
+    };
+}
+
+export function login( uuid, apiToken ) {
+    return {
+        type : LOGIN,
+        payload : {
+            authentication : {
+                uuid : uuid,
+                apiToken : apiToken
+            }
+        }
+    };
+}
+
+export function logout( uuid, apiToken ) {
+    console.log("Logout called from actions");
+    return {
+        type : LOGOUT,
+        payload : {
+            tasks : [],
+            authentication : {
+                uuid: '',
+                apiToken: ''
+            }
         }
     };
 }
